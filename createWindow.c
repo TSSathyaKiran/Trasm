@@ -28,7 +28,7 @@ int main()
 
     int AttributeValueMask = CWBackPixel | CWEventMask;
     XSetWindowAttributes WindowAttributes = {};
-    WindowAttributes.background_pixel = 0xffffccaa;
+    WindowAttributes.background_pixel = 0x0C1D33;
     WindowAttributes.event_mask = StructureNotifyMask | KeyPressMask | KeyReleaseMask | ExposureMask;
 
     Window MainWindow = XCreateWindow(MainDisplay, RootWindow, 
@@ -36,9 +36,20 @@ int main()
             BorderWidth, WindowDepth, WindowClass, WindowVisual,
             AttributeValueMask, &WindowAttributes);
 
+    XSizeHints *hints = XAllocSizeHints();
+  
+    hints->flags = PMinSize | PMaxSize;
+    hints->min_width = 800;
+    hints->min_height = 600;
+    hints->max_width = 800;
+    hints->max_height = 600;
+    
+    XSetWMNormalHints(MainDisplay, MainWindow, hints);
+    XFree(hints);
+
     XMapWindow(MainDisplay, MainWindow);
 
-    XStoreName(MainDisplay, MainWindow, "Moving rectangle. Use arrow keys to move.");
+    XStoreName(MainDisplay, MainWindow, "TRASM");
 
     Atom WM_DELETE_WINDOW = XInternAtom(MainDisplay, "WM_DELETE_WINDOW", False);
     if(!XSetWMProtocols(MainDisplay, MainWindow, &WM_DELETE_WINDOW, 1)) {
@@ -47,10 +58,13 @@ int main()
 
 
     entity Box = {};
-    Box.Width = 50;
-    Box.Height = 80;
+    Box.Width = 15;
+    Box.Height = 45;
     Box.X = WindowWidth/2 - Box.Width/2;
     Box.Y = WindowHeight/2 - Box.Height/2;
+    XSetForeground(MainDisplay, Context, 0xffa60d); 
+    XFillRectangle(MainDisplay, MainWindow, Context, Box.X, Box.Y, Box.Width, Box.Height);
+
     int StepSize = 5;
 
     int IsWindowOpen = 1;
@@ -65,38 +79,23 @@ int main()
             case KeyRelease:
             {
                 XKeyPressedEvent *Event = (XKeyPressedEvent *)&GeneralEvent;
-                if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_Escape))
-                {
-                    IsWindowOpen = 0;
-                }
-
-                if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_Down))
+                if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_S))
                 {
                     Box.Y += StepSize;
                 }
-                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_Up))
+                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_W))
                 {
                     Box.Y -= StepSize;
                 }
-                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_Right))
+                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_D))
                 {
                     Box.X += StepSize;
                 }
-                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_Left))
+                else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_A))
                 {
                     Box.X -= StepSize;
                 }
             } break;
-
-            case ClientMessage:
-            {
-                XClientMessageEvent *Event = (XClientMessageEvent *) &GeneralEvent;
-                if((Atom)Event->data.l[0] == WM_DELETE_WINDOW) {
-                    XDestroyWindow(MainDisplay, MainWindow);
-                    IsWindowOpen = 0;
-                }
-            } break;
-
         }
 
         XClearWindow(MainDisplay, MainWindow);
