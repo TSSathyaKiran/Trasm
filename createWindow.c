@@ -81,18 +81,26 @@ int main()
                 XKeyPressedEvent *Event = (XKeyPressedEvent *)&GeneralEvent;
                 if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_S))
                 {
+                    Box.Width = 15;
+                    Box.Height = 45;
                     Box.Y += StepSize;
                 }
                 else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_W))
                 {
+                    Box.Width = 15;
+                    Box.Height = 45;
                     Box.Y -= StepSize;
                 }
                 else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_D))
                 {
+                    Box.Width = 45;
+                    Box.Height = 15;
                     Box.X += StepSize;
                 }
                 else if(Event->keycode == XKeysymToKeycode(MainDisplay, XK_A))
                 {
+                    Box.Width = 45;
+                    Box.Height = 15;
                     Box.X -= StepSize;
                 }
             } break;
