@@ -16,7 +16,7 @@ int main()
 
     int DefaultScreen = DefaultScreen(MainDisplay);
     GC Context = XDefaultGC(MainDisplay, DefaultScreen);
-    
+     
     int WindowX = 0;
     int WindowY = 0;
     int WindowWidth = 800;
