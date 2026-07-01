@@ -10,6 +10,8 @@ Y_cord: .quad 278
 player_w:   .quad 15
 player_h:   .quad 45
 
+is_running: .quad 1
+
 .section .text
 .global game_handle_event
 .global game_update
@@ -44,6 +46,14 @@ event_w:
     ldr x2, [x3]
     sub x2, x2, #5
     str x2, [x3]
+    adr x3, player_w
+    ldr s2, [x3]
+    mov x2, #15
+    str x2, [x3]
+    adr x3, player_h
+    ldr x2, [x3]
+    mov x2, #45
+    str x2, [x3]
     ret
 
 event_a:
@@ -51,6 +61,14 @@ event_a:
     adr x3, X_cord
     ldr x2, [x3]
     sub x2, x2, #5
+    str x2, [x3]
+    adr x3, player_w
+    ldr s2, [x3]
+    mov x2, #45
+    str x2, [x3]
+    adr x3, player_h
+    ldr x2, [x3]
+    mov x2, #15
     str x2, [x3]
     ret
 
@@ -60,6 +78,14 @@ event_s:
     ldr x2, [x3]
     add x2, x2, #5
     str x2, [x3]
+    adr x3, player_w
+    ldr s2, [x3]
+    mov x2, #15
+    str x2, [x3]
+    adr x3, player_h
+    ldr x2, [x3]
+    mov x2, #45
+    str x2, [x3]
     ret
 
 event_d:
@@ -68,10 +94,25 @@ event_d:
     ldr x2, [x3]
     add x2, x2, #5
     str x2, [x3]
+    adr x3, player_w
+    ldr s2, [x3]
+    mov x2, #45
+    str x2, [x3]
+    adr x3, player_h
+    ldr x2, [x3]
+    mov x2, #15
+    str x2, [x3]
     ret
 
 
-game_update:
+game_running:
+    adr x3, is_running
+    ldr x0, [x3]
+    ret
 
+game_set:
+    adr x3, is_running
+    str x0, [x3]
+    ret
     
     
